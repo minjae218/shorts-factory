@@ -2,5 +2,5 @@ __pycache__/
 *.pyc
 .env
 output/
-assets/music_generated/*
-assets/images/*
+assets/music_generated/
+assets/images/
