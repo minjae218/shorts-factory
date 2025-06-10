@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>쇼츠 자동 생성기 - Web UI</title>
+</head>
+<body style="font-family: sans-serif; padding: 2em;">
+  <h1>🎬 유튜브 쇼츠 자동 생성기</h1>
+
+  <form method="post" action="/generate">
+    <label>🔥 실시간 인기 키워드 선택:</label><br>
+    <select name="script" required>
+      {% for kw in keywords %}
+        <option value="{{ kw }}">{{ kw }}</option>
+      {% endfor %}
+    </select><br><br>
+
+    <label>📁 카테고리 선택:</label><br>
+    <select name="category" required>
+      <option value="kids">키즈</option>
+      <option value="camping">캠핑</option>
+      <option value="new_products">신제품</option>
+      <option value="useful_tips">유용한팁</option>
+      <option value="korea_travel">한국여행</option>
+      <option value="kcelebs">한국연예인</option>
+      <option value="life_in_korea">한국살이</option>
+    </select><br><br>
+
+    <button type="submit">🎥 영상 생성</button>
+  </form>
+</body>
+</html>

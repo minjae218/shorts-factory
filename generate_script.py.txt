@@ -1,0 +1,31 @@
+import openai
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def create_script_from_trend(trend_keyword):
+    prompt = f"""
+    '{trend_keyword}' 주제를 바탕으로 유튜브 쇼츠용 15초 분량의 간결한 스크립트를 작성해줘.
+    - 재미있고 눈길을 끌 수 있도록 써줘.
+    - 2~3문장으로 구성해줘.
+    - 구어체 스타일이면 좋아.
+    """
+
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "너는 콘텐츠 기획 전문가야."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=200,
+            temperature=0.8
+        )
+        result = response.choices[0].message.content.strip()
+        return result
+
+    except Exception as e:
+        print(f"GPT 오류: {e}")
+        return f"{trend_keyword}에 대한 정보를 알려드릴게요."

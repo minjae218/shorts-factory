@@ -1,0 +1,39 @@
+from core.fetch_trends import get_trending_keywords
+from core.fetch_extra_topics import get_extra_topics
+from core.keyword_classifier import classify_keyword_to_category
+from core.generate_script import create_script_from_trend
+from core.video_generator_tts import generate_pro_video_with_voice
+from datetime import datetime
+import os
+
+MAX_DAILY_VIDEOS = 100
+
+def run_daily_batch():
+    keywords = get_trending_keywords(10) + get_extra_topics()
+    keywords = list(set(keywords))  # 중복 제거
+    total = 0
+
+    for kw in keywords:
+        category = classify_keyword_to_category(kw)
+        try:
+            script = create_script_from_trend(kw)
+            today = datetime.today().strftime("%Y-%m-%d")
+            output_dir = f"output/{category}/ko/{today}"
+            os.makedirs(output_dir, exist_ok=True)
+            filename = f"{category}_{hash(script) % 9999}.mp4"
+            output_path = os.path.join(output_dir, filename)
+
+            generate_pro_video_with_voice(script, category, output_path)
+
+            print(f"✅ {kw} ▶️ {filename}")
+            total += 1
+        except Exception as e:
+            print(f"❌ {kw} ▶️ 실패: {e}")
+
+        if total >= MAX_DAILY_VIDEOS:
+            break
+
+    print(f"🎉 하루 생성 완료: {total}개")
+
+if __name__ == "__main__":
+    run_daily_batch()
